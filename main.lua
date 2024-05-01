@@ -1,5 +1,5 @@
 http = require 'socket.http'
-local baseURL = "https://https://raw.githubusercontent.com//BlueMoonJune/loveweb/"
+local baseURL = "https://https://raw.githubusercontent.com//BlueMoonJune/loveweb/main/"
 
 function require(path)
   local url = baseURL..path:gsub("%.", "/")..".lua"
