@@ -1,3 +1,0 @@
-
-uses: love-actions/love-actions-core@v1.1.0
-with: ./assets/ ./logics/ ./main.lua ./config.lua
