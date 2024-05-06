@@ -19,11 +19,14 @@ local function getNamespace(path)
         return ns
     end
     local t = root
+    local curPath = ""
     for dir in path:gmatch('[^./]+') do
-        if not t[dir] then
+        curPath = curPath .. dir
+        if not rawget(t, dir) then
             t[dir] = {}
         end
         t = t[dir]
+        curPath = curPath .. "."
     end
     return t
 end
@@ -35,6 +38,38 @@ function require(modname)
     PATH = oldpath
     return getNamespace(modname), table.unpack(ret)
 end
+
+local function isModuleAvailable(name)
+    if package.loaded[name] then
+        return true
+    else
+        for _, searcher in ipairs(package.searchers or package.loaders) do
+            local loader = searcher(name)
+            if type(loader) == 'function' then
+                package.preload[name] = loader
+                return true
+            end
+        end
+        return false
+    end
+end
+
+local dir = {}
+dir.__index = function (t, v)
+    local path
+    if not rawget(t, 'path') then
+        path = v
+    else
+        path = t.path .. '.' .. v
+    end
+    if isModuleAvailable(path) then
+        return require(path)
+    else
+        return setmetatable({path = path}, dir)
+    end
+end
+
+setmetatable(root, dir)
 
 function gmeta.__index(_, k)
     return getNamespace(PATH)[k] or root[k]
