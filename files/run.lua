@@ -2,10 +2,26 @@
 		ASSET DATA
 ------------------------]]--
 
+print(love.filesystem.getSource())
+
+function filetree(path, indent)
+	indent = indent or 0
+	local tab = ('----'):rep(indent)
+	for _, v in ipairs(love.filesystem.getDirectoryItems(path)) do
+		print(tab .. v)
+		local fullpath = path .. v
+		if love.filesystem.isDirectory(fullpath) then
+			filetree(fullpath..'/', indent + 1)
+		end
+	end
+end
+
+filetree("")
+
 love.graphics.setDefaultFilter("nearest", "nearest")
 
 print(':3')
-local player = love.graphics.newImage(love.filesystem.newFileData("assets/player"))
+local player = love.graphics.newImage(love.image.newImageData("assets/player.png"))
 print(':?')
 
 local canvas = love.graphics.newCanvas(25 * 16, 25 * 9)

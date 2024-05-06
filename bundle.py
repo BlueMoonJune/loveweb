@@ -21,6 +21,8 @@ output += '''
 ]]
 for path, s in bundle:gmatch("### ([^ ]*) ###\\n([^\\n]*)\\n") do
 	local bytes = s:gsub("%x%x", function(digits) return string.char(tonumber(digits, 16)) end)
+	local dir = path:match('.+/')
+    if dir then love.filesystem.createDirectory(dir) end
 	love.filesystem.write(path, bytes)
 end
 
