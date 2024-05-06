@@ -1,1 +1,0 @@
-bundle = love.system.getClipboardText()
